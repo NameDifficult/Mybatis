@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mappers.EmpMapper">
+
+    <!--
+        Emp selectEmpAndDept(@Param("eid") Integer eid);
+    -->
+    <resultMap id="selectEmpAndDeptByStepOne" type="Emp">
+        <id property="eid" column="eid"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="email" column="email"></result>
+        <association
+                property="dept"
+                column="did"
+                select="mybatis.mappers.DeptMapper.selectEmpAndDeptTwo"
+        ></association>
+    </resultMap>
+    <select id="selectEmpAndDept" resultMap="selectEmpAndDeptByStepOne">
+        select * from t_emp where eid = #{eid};
+    </select>
+
+
+    <!--
+        List<Emp> selectDeptAndEmpTwo(@Param("did") Integer did);
+    -->
+    <select id="selectDeptAndEmpTwo" resultType="Emp">
+        select * from t_emp where did = #{did};
+    </select>
+
+
+
+    <!--
+        Integer selectEmpCount(@Param("did") Integer did);
+    -->
+    <select id="selectEmpCount" resultType="integer">
+        select count(*) from t_emp where did = #{did};
+    </select>
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mappers.DeptMapper">
+
+    <!--
+        Dept selectEmpAndDeptTwo(@Param("did") Integer did);
+    -->
+    <select id="selectEmpAndDeptTwo" resultType="mybatis.pojo.Dept">
+        select * from t_dept where did = #{did};
+    </select>
+
+
+    <!--
+        Dept selectDeptAndEmp(@Param("deptName") String deptName);
+    -->
+    <resultMap id="selectDeptAndEmpByStep" type="Dept">
+        <id property="did" column="did"></id>
+        <result property="deptName" column="dept_name"></result>
+<!--        <association property="list" column="did"-->
+<!--                     select="mybatis.mappers.EmpMapper.selectDeptAndEmpTwo">-->
+<!--        </association>-->
+        <association property="count" column="did"
+                     select="mybatis.mappers.EmpMapper.selectEmpCount"
+        ></association>
+    </resultMap>
+    <select id="selectDeptAndEmp" resultMap="selectDeptAndEmpByStep">
+        select * from t_dept where dept_name = #{deptName};
+    </select>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mybatis.mapper.SqlMapper">
+
+    <!-- List<User> getUserByLike(@Param("username") String username);
+        模糊查询时不能使用单独使用#{} ， 需要配合concat字符串拼接
+    -->
+
+    <select id="getUserByLike" resultType="User">
+        <!--    select * from t_user where username like '%${username}%'; -->
+        <!-- select * from t_user where username like concat('%',#{username},'%'); -->
+        select * from t_user where username like "%"#{username}"%";<!-- 常用 -->
+    </select>
+
+
+    <!-- int deleteMore(@Param("ids") String ids); -->
+    <delete id="deleteMore">
+        delete from t_user where id in(${ids});
+    </delete>
+
+
+    <!-- List<User> getUserByTableName(@Param("tableName") String tableName); -->
+    <select id="getUserByTableName" resultType="User">
+        select * from ${tableName};
+    </select>
+
+
+    <!-- int insertUser(User user);
+        useGeneratedKeys:设置当前标签中的SQL使用了自动递增的主键
+        keyProperty：将获取到的自动递增的主键放入传入的user中的id中
+    -->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user values(null,#{username},#{password},#{age},#{sex},#{email});
+    </insert>
+</mapper>
